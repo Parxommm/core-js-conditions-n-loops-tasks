@@ -268,8 +268,16 @@ function getIndexOf(str, letter) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num, digit) {
+  const str = `${num}`;
+  const len = str.length;
+
+  for (let i = 0; i < len; i += 1) {
+    if (str[i] === `${digit}`) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -285,8 +293,30 @@ function isContainNumber(/* num, digit */) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  const { length } = arr;
+
+  if (length < 3) {
+    return -1;
+  }
+
+  for (let i = 1; i < length; i += 1) {
+    let leftSum = 0;
+    for (let j = i - 1; j >= 0; j -= 1) {
+      leftSum += arr[j];
+    }
+
+    let rightSum = 0;
+    for (let k = i + 1; k < length; k += 1) {
+      rightSum += arr[k];
+    }
+
+    if (leftSum === rightSum) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 /**
@@ -310,8 +340,52 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const result = new Array(size);
+  const countElements = size ** 2;
+
+  for (let i = 0; i < size; i += 1) {
+    const innerArr = new Array(size);
+    result[i] = innerArr;
+  }
+
+  let topLine = 0;
+  let rightLine = size - 1;
+  let bottomLine = size - 1;
+  let leftLine = 0;
+
+  let i = 0;
+  let j = 0;
+
+  for (let k = 1; k <= countElements; k += 1) {
+    if (i === topLine && j < rightLine) {
+      result[i][j] = k;
+      j += 1;
+      if (j === rightLine) {
+        topLine += 1;
+      }
+    } else if (j === rightLine && i < bottomLine) {
+      result[i][j] = k;
+      i += 1;
+      if (i === bottomLine) {
+        rightLine -= 1;
+      }
+    } else if (i === bottomLine && j > leftLine) {
+      result[i][j] = k;
+      j -= 1;
+      if (j === leftLine) {
+        bottomLine -= 1;
+      }
+    } else if (j === leftLine) {
+      result[i][j] = k;
+      i -= 1;
+      if (i === topLine) {
+        leftLine += 1;
+      }
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -329,8 +403,29 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const res = [...matrix];
+  const { length } = matrix;
+
+  let left = 0;
+  let right = length - 1;
+
+  while (left < right) {
+    for (let i = 0; i < right - left; i += 1) {
+      const top = left;
+      const bottom = right;
+
+      const topLeft = res[top][left + i];
+      res[top][left + i] = res[bottom - i][left];
+      res[bottom - i][left] = res[bottom][right - i];
+      res[bottom][right - i] = res[top + i][right];
+      res[top + i][right] = topLeft;
+    }
+    left += 1;
+    right -= 1;
+  }
+
+  return res;
 }
 
 /**
@@ -347,8 +442,21 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+
+function sortByAsc(arr) {
+  function insertionSort(list) {
+    const res = list;
+    for (let i = 1, l = res.length; i < l; i += 1) {
+      const current = list[i];
+      let j = i;
+      while (j > 0 && list[j - 1] > current) {
+        res[j] = list[j - 1];
+        j -= 1;
+      }
+      res[j] = current;
+    }
+  }
+  return insertionSort(arr);
 }
 
 /**
