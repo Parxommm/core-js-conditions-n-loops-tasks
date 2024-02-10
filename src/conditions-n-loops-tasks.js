@@ -446,16 +446,20 @@ function rotateMatrix(matrix) {
 function sortByAsc(arr) {
   function insertionSort(list) {
     const res = list;
-    for (let i = 1, l = res.length; i < l; i += 1) {
-      const current = list[i];
+
+    for (let i = 1; i < res.length; i += 1) {
+      const current = res[i];
       let j = i;
-      while (j > 0 && list[j - 1] > current) {
-        res[j] = list[j - 1];
+
+      while (j > 0 && res[j - 1] > current) {
+        res[j] = res[j - 1];
         j -= 1;
       }
+
       res[j] = current;
     }
   }
+
   return insertionSort(arr);
 }
 
@@ -469,15 +473,33 @@ function sortByAsc(arr) {
  * @return {string} The shuffled string.
  *
  * @example:
- *  '012345', 1 => '024135'
+ *  '012345', 1 => '024135'   012345/
  *  'qwerty', 1 => 'qetwry'
  *  '012345', 2 => '024135' => '043215'
  *  'qwerty', 2 => 'qetwry' => 'qtrewy'
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let res = str;
+
+  for (let i = 1; i <= iterations; i += 1) {
+    let startStr = '';
+    let endStr = '';
+
+    for (let j = 0; j < res.length; j += 1) {
+      if (j % 2) {
+        endStr += res[j];
+      } else startStr += res[j];
+    }
+    res = startStr + endStr;
+
+    if (res === str) {
+      const lastRepeatIndex = iterations - (iterations % i);
+      i = lastRepeatIndex;
+    }
+  }
+  return res;
 }
 
 /**
