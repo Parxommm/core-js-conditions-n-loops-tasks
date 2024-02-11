@@ -519,8 +519,97 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  function insertionSortStr(str) {
+    let res = [];
+
+    for (let i = 0; i < str.length; i += 1) {
+      res = [...res, str[i]];
+    }
+
+    for (let i = 1; i < res.length; i += 1) {
+      const current = res[i];
+      let j = i;
+
+      while (j > 0 && res[j - 1] > current) {
+        res[j] = res[j - 1];
+        j -= 1;
+      }
+
+      res[j] = current;
+    }
+
+    let resStr = '';
+
+    for (let i = 0; i < res.length; i += 1) {
+      resStr += res[i];
+    }
+    return resStr;
+  }
+
+  function getLeftPartStr(str, index) {
+    let res = '';
+    for (let i = 0; i < index; i += 1) {
+      res += str[i];
+    }
+    return res;
+  }
+
+  function getRightPartStr(str, index) {
+    let res = '';
+    for (let i = index; i < str.length; i += 1) {
+      res += str[i];
+    }
+    return res;
+  }
+
+  const numStr = `${number}`;
+  let i = numStr.length - 1;
+
+  while (numStr[i - 1] >= numStr[i]) {
+    i -= 1;
+
+    if (i === 0) {
+      return number;
+    }
+  }
+
+  const char1 = numStr[i - 1];
+
+  let firstPart = getLeftPartStr(numStr, i - 1);
+  const lastPart = getRightPartStr(numStr, i);
+  let sortedLastPart = insertionSortStr(lastPart);
+  let greaterThanChar1 = '';
+
+  let j = 0;
+  for (j; j < sortedLastPart.length; j += 1) {
+    if (sortedLastPart[j] > char1) {
+      greaterThanChar1 = sortedLastPart[j];
+      firstPart += greaterThanChar1;
+      break;
+    }
+  }
+
+  if (sortedLastPart.length <= 1) {
+    sortedLastPart = char1;
+  } else if (sortedLastPart.length === 2) {
+    sortedLastPart = insertionSortStr(sortedLastPart[0] + char1);
+  } else {
+    let filteredLastPart = '';
+    if (j === 0) {
+      filteredLastPart = getRightPartStr(sortedLastPart, j + 1);
+    } else {
+      const lastPartStart = getLeftPartStr(sortedLastPart, j);
+      const lastPartEnd = getRightPartStr(sortedLastPart, j + 1);
+      filteredLastPart = lastPartStart + lastPartEnd;
+    }
+
+    sortedLastPart = insertionSortStr(filteredLastPart + char1);
+  }
+
+  const newString = firstPart + sortedLastPart;
+
+  return +newString;
 }
 
 module.exports = {
